@@ -1,0 +1,138 @@
+{{!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Đăng ký
+    </title>
+    <!-- GOOGLE FONT -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <!-- BOXICONS -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <!-- APP CSS -->
+    <link rel="stylesheet" href="/css/login2.css">
+</head>
+
+<body style="background-image: url('https://images.pexels.com/photos/996329/pexels-photo-996329.jpeg');">
+
+    <form method="POST" class="form" id="signin-form"  action="/user/signup" enctype="multipart/form-data">
+        <div class="title-form">ĐĂNG KÝ</div>
+        <div class="form-group">
+            <input type="email" class="form-input" name="email" placeholder="Nhập email" id="signin-email">
+            <span class="form-input-icon err">
+                <i class='bx bx-error-circle'></i>
+            </span>
+            <span class="form-input-icon success">
+                <i class='bx bx-check-circle'></i>
+            </span>
+            <span class="form-input-err-msg" data-err-for="signin-email"></span>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-input" name="password" placeholder="Nhập mật khẩu" id="signin-password">
+            <span class="form-input-icon err">
+                <i class='bx bx-error-circle'></i>
+            </span>
+            <span class="form-input-icon success">
+                <i class='bx bx-check-circle'></i>
+            </span>
+            <span class="form-input-err-msg" data-err-for="signin-password"></span>
+        </div>
+        {{!-- <div class="form-group">
+            <input type="password" class="form-input" placeholder="Nhập lại mật khẩu" id="signup-repassword">
+            <span class="form-input-icon err">
+                <i class='bx bx-error-circle'></i>
+            </span>
+            <span class="form-input-icon success">
+                <i class='bx bx-check-circle'></i>
+            </span>
+            <span class="form-input-err-msg" data-err-for="signup-repassword"></span>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-input" name="fullName" placeholder="Nhập họ và tên" id="signup-name">
+            <span class="form-input-icon err">
+                <i class='bx bx-error-circle'></i>
+            </span>
+            <span class="form-input-icon success">
+                <i class='bx bx-check-circle'></i>
+            </span>
+            <span class="form-input-err-msg" data-err-for="signup-name"></span>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-input" name="telephone" placeholder="Nhập số điện thoại" id="signup-phone">
+            <span class="form-input-icon err">
+                <i class='bx bx-error-circle'></i>
+            </span>
+            <span class="form-input-icon success">
+                <i class='bx bx-check-circle'></i>
+            </span>
+            <span class="form-input-err-msg" data-err-for="singup-phone"></span>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-input" name="address" placeholder="Nhập địa chỉ" id="signup-address">
+            <span class="form-input-icon err">
+                <i class='bx bx-error-circle'></i>
+            </span>
+            <span class="form-input-icon success">
+                <i class='bx bx-check-circle'></i>
+            </span>
+            <span class="form-input-err-msg" data-err-for="signup-address"></span>
+        </div> --}}
+        {{!-- <div class="form-group form-group-checkbox">
+            <input type="checkbox" id="remember" checked="checked">
+            <label for="remember">
+                Nhớ mật khẩu
+                <i class='bx bx-check'></i>
+            </label>
+        </div> --}}
+        {{!-- <div class="form-group">
+            <input type="text" class="form-input" name="gender" placeholder="Nhập giới tính" id="signup-gender">
+            <span class="form-input-icon err">
+                <i class='bx bx-error-circle'></i>
+            </span>
+            <span class="form-input-icon success">
+                <i class='bx bx-check-circle'></i>
+            </span>
+            <span class="form-input-err-msg" data-err-for="singup-gender"></span>
+        </div> --}}
+        <div class="row">
+            {{#if data.success}}
+            <div class="col-md-12 text-success" style="font-size: 14px;">{{data.success}}</div>
+            <div class="col-md-12 mb-4" style="font-size: 14px;"><a href="/user/login">Back to login page</a></div>
+            {{/if}}
+            {{#if data.error}}
+            <div class="col-md-12 text-danger" style="font-size: 14px;">{{data.error}}</div>
+            {{/if}}
+        </div>
+        <input type="submit" value="Đăng ký" class="form-btn" id="signup-btn">
+        <span class="form-delimiter">
+            Hoặc đăng ký với
+        </span>
+        <div class="form-social">
+            <a href="#" class="form-social-item fb">
+                <i class='bx bxl-facebook'></i>
+            </a>
+            <a href="#" class="form-social-item tw">
+                <i class='bx bxl-twitter'></i>
+            </a>
+            <a href="#" class="form-social-item gg">
+                <i class='bx bxl-google'></i>
+            </a>
+        </div>
+        <span class="form-txt">
+            Đã có tài khoản?
+            <a href="/user/login">Đăng nhập!</a>
+        </span>
+    </form>
+
+    <!-- APP JS -->
+    <script src="/js/loginJs.js"></script>
+
+</body>
+
+</html> --}}

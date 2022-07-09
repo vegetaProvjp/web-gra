@@ -15,7 +15,6 @@ class UserController {
                 if (err) {
                     res.render("user/login", { layout: false });
                 } else {
-                    // console.log(decodedToken);
                     res.redirect("/");
                 }
             });
@@ -37,6 +36,7 @@ class UserController {
             res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
             res.redirect("/");
             req.app.locals.login = true;
+            res.locals.currentUser = req.user;
         } catch (error) {
             res.status(400).json({ error: "Tài khoản hoặc mật khẩu không đúng" });
         }
@@ -52,7 +52,6 @@ class UserController {
             if (!account) {
                 hashPassword = await bcrypt.hash(req.body.password, 10)
                 req.body.password = hashPassword
-                console.log(req.body)
                 Account.create({
                     email: req.body.email,
                     password: req.body.password,
@@ -94,6 +93,7 @@ class UserController {
     //[GET] /user/logout
     logout(req, res) {
         req.app.locals.login = false;
+        req.app.locals.logout = true;
         res.clearCookie("jwt");
         res.redirect("/");
     }

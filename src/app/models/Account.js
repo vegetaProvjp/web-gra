@@ -29,6 +29,16 @@ AccountSchema.statics.login = async function(email, password){
     };
     throw Error("incorrect username");
 }
+
+//quan hệ với product: id cua Account de khớp với biến user khi tạo product
+// AccountSchema.virtual('products',{
+//     ref : 'products',
+//     localField: '_id',
+//     foreignField: 'account'
+// })
+
+AccountSchema.set('toObject', { virtuals: true });
+AccountSchema.set('toJSON', { virtuals: true });
 const Account =mongoose.model('account', AccountSchema);
 
 module.exports = Account;

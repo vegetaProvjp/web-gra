@@ -1,7 +1,6 @@
 
 (function ($) {
     "use strict";
-    console.log('main js')
     /*[ Load page ]
     ===========================================================*/
     $(".animsition").animsition({
@@ -194,13 +193,13 @@
 
     /*==================================================================
     [ Cart ]*/
-    $('.js-show-cart').on('click',function(){
-        $('.js-panel-cart').addClass('show-header-cart');
-    });
+    // $('.js-show-cart').on('click',function(){
+    //     $('.js-panel-cart').addClass('show-header-cart');
+    // });
 
-    $('.js-hide-cart').on('click',function(){
-        $('.js-panel-cart').removeClass('show-header-cart');
-    });
+    // $('.js-hide-cart').on('click',function(){
+    //     $('.js-panel-cart').removeClass('show-header-cart');
+    // });
 
     /*==================================================================
     [ Cart ]*/
@@ -214,15 +213,16 @@
 
     /*==================================================================
     [ +/- num product ]*/
-    $('.btn-num-product-down').on('click', function(){
-        var numProduct = Number($(this).next().val());
-        if(numProduct > 0) $(this).next().val(numProduct - 1);
-    });
+    // $('.btn-num-product-down').on('click', function(){
+    //     var numProduct = Number($(this).next().val());
+    //     if(numProduct > 0) $(this).next().val(numProduct - 1);
+    // });
 
-    $('.btn-num-product-up').on('click', function(){
-        var numProduct = Number($(this).prev().val());
-        $(this).prev().val(numProduct + 1);
-    });
+    // $('.btn-num-product-up').on('click', function(){
+    //     var numProduct = Number($(this).prev().val());
+    //     console.log(numProduct)
+    //     $(this).prev().val(numProduct + 1);
+    // });
 
     /*==================================================================
     [ Rating ]*/

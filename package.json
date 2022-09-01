@@ -24,7 +24,9 @@
     "body-parser": "^1.20.0",
     "cloudinary": "^1.30.0",
     "connect-mongo": "^4.6.0",
+    "content-based-recommender": "^1.5.0",
     "cookie-parser": "^1.4.6",
+    "cron": "^2.1.0",
     "datauri": "^4.1.0",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
@@ -37,7 +39,14 @@
     "mongoose-slug-generator": "^1.0.4",
     "morgan": "^1.10.0",
     "multer": "*",
+    "node-cron": "^3.0.1",
+    "node-fetch": "^2.6.7",
+    "node-schedule": "^2.1.0",
     "passport": "^0.6.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "paypal-rest-sdk": "^1.8.1",
+    "uuid": "^8.3.2",
+    "xhr2": "^0.2.1",
+    "xlsx": "^0.18.5"
   }
 }

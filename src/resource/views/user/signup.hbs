@@ -21,10 +21,11 @@
 
 <body style="background-image: url('https://images.pexels.com/photos/996329/pexels-photo-996329.jpeg');">
 
-    <form method="POST" class="form" id="signin-form"  action="/user/signup">
+    <form method="POST" class="form" id="signin-form" action="/user/signup">
         <div class="title-form">ĐĂNG KÝ</div>
         <div class="form-group">
-            <input type="email" class="form-input" name="email" placeholder="Nhập email" id="signin-email">
+            <input type="email" class="form-input" name="email" placeholder="Nhập email" id="signin-email"
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Email không hợp lệ" required>
             <span class="form-input-icon err">
                 <i class='bx bx-error-circle'></i>
             </span>
@@ -34,7 +35,8 @@
             <span class="form-input-err-msg" data-err-for="signin-email"></span>
         </div>
         <div class="form-group">
-            <input type="password" class="form-input" name="password" placeholder="Nhập mật khẩu" id="signin-password">
+            <input type="password" class="form-input" name="password" placeholder="Nhập mật khẩu" id="signin-password"
+                required pattern=".{6,}" title="Mật khẩu không hợp lệ">
             <span class="form-input-icon err">
                 <i class='bx bx-error-circle'></i>
             </span>
@@ -44,17 +46,8 @@
             <span class="form-input-err-msg" data-err-for="signin-password"></span>
         </div>
         <div class="form-group">
-            <input type="password" class="form-input" placeholder="Nhập lại mật khẩu" id="signup-repassword">
-            <span class="form-input-icon err">
-                <i class='bx bx-error-circle'></i>
-            </span>
-            <span class="form-input-icon success">
-                <i class='bx bx-check-circle'></i>
-            </span>
-            <span class="form-input-err-msg" data-err-for="signup-repassword"></span>
-        </div>
-        <div class="form-group">
-            <input type="text" class="form-input" name="fullName" placeholder="Nhập họ và tên" id="signup-name">
+            <input type="text" class="form-input" name="fullName" placeholder="Nhập họ và tên" id="signup-name"
+                required>
             <span class="form-input-icon err">
                 <i class='bx bx-error-circle'></i>
             </span>
@@ -64,7 +57,8 @@
             <span class="form-input-err-msg" data-err-for="signup-name"></span>
         </div>
         <div class="form-group">
-            <input type="text" class="form-input" name="phone" placeholder="Nhập số điện thoại" id="signup-phone">
+            <input type="text" class="form-input" name="phone" placeholder="Nhập số điện thoại" id="signup-phone"
+                required>
             <span class="form-input-icon err">
                 <i class='bx bx-error-circle'></i>
             </span>
@@ -74,7 +68,8 @@
             <span class="form-input-err-msg" data-err-for="singup-phone"></span>
         </div>
         <div class="form-group">
-            <input type="text" class="form-input" name="address" placeholder="Nhập địa chỉ" id="signup-address">
+            <input type="text" class="form-input" name="address" placeholder="Nhập địa chỉ" id="signup-address"
+                required>
             <span class="form-input-icon err">
                 <i class='bx bx-error-circle'></i>
             </span>
@@ -83,6 +78,22 @@
             </span>
             <span class="form-input-err-msg" data-err-for="signup-address"></span>
         </div>
+
+        {{!-- <div class="form-group">
+            <select style="color: white;" class="form-input" name="province" id="city">
+                <option value="" selected>Chọn tỉnh thành</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <select style="color: white;" class="form-input" name="district" id="district">
+                <option value="" selected>Chọn quận, huyện</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <select style="color: white;" class="form-input" name="ward" id="ward">
+                <option value="" selected>Chọn phường, xã</option>
+            </select>
+        </div> --}}
         <div class="form-group">
             <select style="color: white;" class="form-input" name="gender" id="gender">
                 <option select="selected" value="0">Nam</option>
@@ -96,11 +107,12 @@
                 <i class='bx bx-check'></i>
             </label>
         </div>
-        
+
         <div class="row">
             {{#if data.success}}
-            <div class="col-md-12 text-success" style="font-size: 16px;">{{data.success}}</div>
-            <div class="col-md-12 mb-4" style="font-size: 16px;"><a href="/user/login">Quay trở lại trang đăng nhập</a></div>
+            <div class="col-md-12 text-warning" style="font-size: 16px; color: orange">{{data.success}}</div>
+            <div class="col-md-12 mb-4" style="font-size: 16px;"><a href="/user/login">Quay trở lại trang đăng nhập</a>
+            </div>
             {{/if}}
             {{#if data.error}}
             <div class="col-md-12 text-danger" style="font-size: 16px;color: red">{{data.error}}</div>
@@ -131,5 +143,54 @@
     <script src="/js/loginJs.js"></script>
 
 </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+<script>
+    var provinces = document.getElementById("city");
+    var districts = document.getElementById("district");
+    var wards = document.getElementById("ward");
+    fetch('https://raw.githubusercontent.com/daohoangson/dvhcvn/master/data/dvhcvn.json').then(response => {
+        return response.json();
+    }).then(data => {
+        renderCity(data.data);
+    }).catch(err => {
+        // Do something for an error here
+    });
+
+    function renderCity(data) {
+        for (var x of data) {
+            provinces.options[provinces.options.length] = new Option(x.name, x.name);
+            // console.log(x.name)
+        }
+
+        // xứ lý khi thay đổi tỉnh thành thì sẽ hiển thị ra quận huyện thuộc tỉnh thành đó
+        provinces.onchange = function () {
+            district.length = 1;
+            ward.length = 1;
+            if (this.value != "") {
+                const result = data.filter(n => n.name === this.value);
+                for (const k of result[0].level2s) {
+                    district.options[district.options.length] = new Option(k.name, k.name);
+                }
+            }
+        };
+
+        // // xứ lý khi thay đổi quận huyện thì sẽ hiển thị ra phường xã thuộc quận huyện đó
+        district.onchange = function () {
+            ward.length = 1;
+            const dataProvinces = data.filter((n) => n.name === provinces.value);
+            console.log(dataProvinces)
+            if (this.value != "") {
+                const dataWards = dataProvinces[0].level2s.filter(n => n.name === this.value)[0].level3s;
+                console.log(dataWards)
+                for (const w of dataWards) {
+                    wards.options[wards.options.length] = new Option(w.name, w.name);
+                }
+            }
+        };
+    }
+</script>
 
 </html>

@@ -2,11 +2,18 @@ const Account = require("../models/Account");
 const Product = require("../models/products");
 const { mongooseToObject, multipleMongooseToObject } = require('../../util/mongoose')
 const userinfo = require("../../util/userinfo");
+const fetch = require('node-fetch')
 const Cart = require("../models/Cart")
 const Category = require("../models/Category")
+const ContentBasedRecommender = require('content-based-recommender')
+const recommender = new ContentBasedRecommender({
+    minScore: 0.1,
+    maxSimilarDocuments: 100
+});
 const FuzzySearch = require('fuzzy-search');
-const PAGE_SIZE = 4
-const { getUser, searchProduct, sortAZ, sortZA, sortPriceAsc, sortPriceDesc, getCategory } = require('../../util/commonFunc')
+const PAGE_SIZE = 16
+var querySearch = ''
+const { getUser, searchProduct, getApiTest, sortAZ, sortZA, sortPriceAsc, sortPriceDesc2, getCategory } = require('../../util/commonFunc')
 class ProductController {
 
     async index(req, res, next) {
@@ -132,11 +139,31 @@ class ProductController {
 
     async detail(req, res, next) {
         const category = await getCategory(req)
+        var allProduct = await Product.find({})
+        var documents = []
+        for (var i = 0; i < allProduct.length; i++) {
+            documents.push({
+                id: allProduct[i].slug,
+                content: allProduct[i].name,
+            })
+        }
+        recommender.train(documents);
+
+        const similarProduct = recommender.getSimilarDocuments(req.params.slug, 0, 8)
+        var similarProductSlug = []
+        for (var i = 0; i < similarProduct.length; i++) {
+            similarProductSlug.push(similarProduct[i].id)
+        }
+        console.log(similarProductSlug)
+        let relatedProduct = await Product.find({ 
+            slug: { $in: similarProductSlug }
+        })
         Product.findOne({ slug: req.params.slug })
             .then(product => {
                 res.render('product/product-detail', {
                     category: multipleMongooseToObject(category),
-                    product: mongooseToObject(product)
+                    product: mongooseToObject(product),
+                    relatedProduct: multipleMongooseToObject(relatedProduct)
                 })
             })
             .catch(next)
@@ -164,32 +191,19 @@ class ProductController {
         }
     }
     async search(req, res) {
-        // try {
-        //     const user = await getUser(req)
-        //     const category = await getCategory(req);
-        //     let rs = await searchProduct(req);
-        //     if (rs) {
-        // res.render('product/search', {
-        //     user: mongooseToObject(user),
-        //     product: rs,
-        //     cate: req.body.category,
-        //     category: multipleMongooseToObject(category)
-        // })
-        //     }
-        // } catch (error) {
-        //     console.log(error)
-        // }
         try {
             const query = req.query.search
+            querySearch = req.query.search
             const product = await Product.find({})
-            const searcher = new FuzzySearch(product, ['name'], ['name_english']);
+            const searcher = new FuzzySearch(product, ['name', 'name_english']);
             const result = searcher.search(query);
             const user = await getUser(req)
             const category = await getCategory(req)
             res.render('product/search', {
                 user: mongooseToObject(user),
                 product: multipleMongooseToObject(result),
-                category: multipleMongooseToObject(category)
+                category: multipleMongooseToObject(category),
+                query: query
             })
         }
         catch (err) {
@@ -200,30 +214,37 @@ class ProductController {
     async sort(req, res, next) {
         try {
             const user = await getUser(req)
-            const category = await getCategory(req);
+            const category = await getCategory(req)
+            const product = await Product.find({})
+            const searcher = new FuzzySearch(product, ['name'], ['name_english']);
+            const result = searcher.search(querySearch);
             switch (req.body.sort) {
                 case '1':
-                    var rs = await sortPriceAsc(req)
+                    var rs = sortPriceAsc(result)
                     res.render('product/search', {
-                        product: rs,
+                        product: multipleMongooseToObject(rs),
+                        category: multipleMongooseToObject(category),
                     })
                     break;
                 case '2':
-                    var rs = await sortPriceDesc(req)
+                    var rs = sortPriceDesc2(result)
                     res.render('product/search', {
-                        product: rs,
+                        product: multipleMongooseToObject(rs),
+                        category: multipleMongooseToObject(category),
                     })
                     break;
                 case '3':
-                    var rs = await sortAZ(req)
+                    var rs = sortAZ(result)
                     res.render('product/search', {
-                        product: rs,
+                        product: multipleMongooseToObject(rs),
+                        category: multipleMongooseToObject(category),
                     })
                     break;
                 case '4':
-                    var rs = await sortZA(req)
+                    var rs = sortZA(result)
                     res.render('product/search', {
-                        product: rs,
+                        product: multipleMongooseToObject(rs),
+                        category: multipleMongooseToObject(category),
                     })
                     break;
                 default:
@@ -235,54 +256,128 @@ class ProductController {
         }
     }
     async cart(req, res, next) {
+        // if (req.session.views) {
+        //     // Increment the number of views.
+        //     req.session.views++
+        //     // Session will expires after 1 min
+        //     // of in activity
+        //     res.write( '< p > Session expires after 1 min of in activity: '
+        //         + (req.session.cookie.expires) + '</p>')
+        //     console.log(req.session.cookie.expires.toString())
+        //     console.log(req.session)
+        //     res.end()
+        // } else {
+        //     req.session.views = 1
+        //     console.log(req.session)
+
+        //     res.end(' New session is started')
+        // }
         const category = await getCategory(req)
+
         if (!req.session.cart) {
             return res.render("product/cart", {
                 category: multipleMongooseToObject(category),
-                products: null
+                products: null,
             });
         }
         var cart = new Cart(req.session.cart);
+        var obj = cart.items
+        // for(var prop in obj) {
+        //     console.log(`obj.${prop} = ${obj[prop]['qty']}`);
+        // }
         res.render("product/cart", {
             category: multipleMongooseToObject(category),
             products: cart.generateArray(),
             totalPrice: cart.totalPrice,
         });
-
     }
-    addCart(req, res, next) {
+    async apiSearchProduct(req, res) {
+        var query = req.params.search
+        query = query.replaceAll('-', ' ')
+        const product = await Product.find({})
+        const searcher = new FuzzySearch(product, ['name'], ['name_english']);
+        const result = searcher.search(query);
+        res.json(result)
+    }
+    async testApiSearch(req, res, next) {
+        fetch('http://localhost:9000/product/api-search-product/áo-polo-nam-cafe')
+            .then((response) => response.json())
+            .then(data => {
+                return res.json(data)
+            })
+    }
+    async addCart(req, res, next) {
         var productId = req.params.id;
         var cart = new Cart(req.session.cart ? req.session.cart : {});
+        //Giảm số lượng trong kho đi 1
+        // const product = await Product.updateOne(
+        //     { _id: productId, "quantity": { $gt: 1 } }, {
+        //     $inc: { "quantity": -1 }
+        // })
+        // const productInfo = await Product.findById(productId)
+        // if (product.modifiedCount == 0) {
+        //     return res.json(`Mặt hàng ${productInfo.name} đã hết`)
+        // }
+        // else {
+        Product.findById(productId)
+            .then(product => {
+                cart.add(product, product.id);
+                console.log(cart)
+                req.session.cart = cart;
+                res.redirect("/product/" + product.slug)
+            })
+            .catch(err => {
 
-        Product.findById(productId, function (err, product) {
-            if (err) {
-                return res.redirect("/");
-            }
-            cart.add(product, product.id);
-            req.session.cart = cart;
-            res.redirect("/product");
-        });
+            })
+        // }
     }
-    reduce(req, res, next) {
+    async delete_cookie(req, res) {
+        res.clearCookie('cart');
+        res.redirect('/')
+    }
+    async reduce(req, res, next) {
+
         var productId = req.params.id;
         var cart = new Cart(req.session.cart ? req.session.cart : {});
 
         cart.reduceByOne(productId);
+        // const product = await Product.updateOne({ _id: productId }, {
+        //     $inc: {
+        //         "quantity": 1
+        //     }
+        // })
         req.session.cart = cart;
         res.redirect("/product/cart");
     }
-    increase(req, res, next) {
+    async increase(req, res, next) {
         var productId = req.params.id;
         var cart = new Cart(req.session.cart ? req.session.cart : {});
+        // const product = await Product.updateOne(
+        //     { _id: productId, "quantity": { $gt: 1 } }, {
+        //     $inc: { "quantity": -1 }
+        // })
+
+        // const productInfo = await Product.findById(productId)
+        // if (product.modifiedCount == 0) {
+        //     return res.json(`Mặt hàng ${productInfo.name} đã hết`)
+        // }
+        // else {
         cart.increaseByOne(productId);
         req.session.cart = cart;
-        res.redirect("/product/cart");
+        return res.redirect("/product/cart");
+        // }
     }
 
-    remove(req, res, next) {
+    async remove(req, res, next) {
         var productId = req.params.id;
         var cart = new Cart(req.session.cart ? req.session.cart : {});
-        cart.removeItem(productId);
+        var productRemove = cart.getProduct(productId)
+        cart.removeItem(productId)
+        // const product = await Product.updateOne({ _id: productId }, {
+        //     $inc: {
+        //         "quantity": productRemove[0].qty
+        //     }
+        // })
         req.session.cart = cart;
         res.redirect("/product/cart");
     }
@@ -305,8 +400,52 @@ class ProductController {
         const rs = await Product.find({})
         res.json(rs)
     }
+
+    async tableProduct(req, res, next) {
+        const category = await getCategory(req)
+
+        Product.find({})
+            .then(product => {
+                res.render('product/table-product', {
+                    layout: false,
+                    category: multipleMongooseToObject(category),
+                    product: multipleMongooseToObject(product)
+                })
+            })
+            .catch(next)
+    }
+    getCookie(req, res, next) {
+
+        if (req.session.views) {
+
+            // Increment the number of views.
+            req.session.views++
+
+            // Session will expires after 1 min
+            // of in activity
+            res.write('< p > Session expires after 1 min of in activity: '
+                + (req.session.cookie.expires) + '</p>')
+            res.end()
+        } else {
+            req.session.views = 1
+
+            res.end(' New session is started')
+        }
+    }
 }
 function escapeRegex(text) {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 }
+
+// function cron(cart, minutes){
+//     //cart: req.session.cart
+//     if(cart) {
+//         cron.schedule(`${minutes} 1 * * *`, () => {
+//             var length = cart.items.length
+//             for (var i = 0; i < length; i++) {
+//                 cart.items[i]
+//             }
+//         });
+//     }
+// }
 module.exports = new ProductController();

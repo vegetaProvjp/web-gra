@@ -257,7 +257,7 @@
   position: absolute;
   background: white;
   right: 20px;
-  min-width: 180px;
+  min-width: 200px;
   margin: 0;
   top: 70%;
   border: 1px #CCC solid;
@@ -288,6 +288,9 @@
 }
 
 .account_header li:first-child {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.account_header li:nth-child(2) {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -2205,6 +2208,34 @@ input.num-product::-webkit-inner-spin-button {
   top: 10px;
   left: 6px;
 }
+.label-sale {
+  position: relative;
+}
+
+.label-sale::after {
+  content: attr(data-label);
+  font-family: Montserrat-Regular;
+  font-size: 12px;
+  color: #fff;
+  line-height: 1.2;
+
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  min-width: 50px;
+  height: 22px;
+  border-radius: 11px;
+  padding: 0 6px;
+  background-color: #d22424;
+  top: 10px;
+  left: 6px;
+}
+
 
 
 
@@ -2386,6 +2417,11 @@ input.num-product::-webkit-inner-spin-button {
 
 /*//////////////////////////////////////////////////////////////////
 [ M-Text 16 - 25 ]*/
+.mtext-100 {
+  font-family: Cabin-Medium;
+  font-size: 14px;
+  line-height: 1.333333;
+}
 .mtext-101 {
   font-family: Cabin-Medium;
   font-size: 18px;
@@ -4108,3 +4144,18 @@ header .navbar .cta-btn a:hover {
   border-bottom-left-radius: 5px;
 }
 #paging .paginationjs-pages ul li:hover:not(.active) {background-color: #ddd;}
+.separate-price {
+  position: relative
+}
+.separate-price:after {
+  color:#eee;
+  font-weight:900;
+  display: block;
+  position: absolute;
+  top: 8px;
+  left: -2px;
+  width: calc(100% + 4px);
+  height: 1px;
+  background: #8d8d8d;
+  content: ''
+}

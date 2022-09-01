@@ -1,5 +1,4 @@
-let a= 30
-if (true) {
-    a=a+1
-}
-console.log(a)
+var a = `1234`
+var b = `4321`
+
+console.log(a+b)

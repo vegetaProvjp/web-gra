@@ -3708,3 +3708,7 @@ iframe {border: none;}
 .pointer-none {
 	pointer-events: none;
 }
+
+.modal-dialog {
+    margin: 20vh auto 0px auto !important
+}

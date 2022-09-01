@@ -3,6 +3,28 @@ const Account = require('../app/models/Account')
 const Category = require('../app/models/Category')
 const mongoose = require('mongoose');
 const Product = require('../app/models/products')
+const FuzzySearch = require('fuzzy-search');
+const fetch = require('node-fetch')
+const xlsx = require('xlsx');
+const path = require('path');
+
+const exportExcel = (data, workSheetColumnNames, workSheetName, filePath) => {
+    const workBook = xlsx.utils.book_new();
+    const workSheetData = [
+        workSheetColumnNames,
+        ... data
+    ];
+    const workSheet = xlsx.utils.aoa_to_sheet(workSheetData);
+    xlsx.utils.book_append_sheet(workBook, workSheet, workSheetName);
+    xlsx.writeFile(workBook, path.resolve(filePath));
+}
+
+const exportUsersToExcel = (users, workSheetColumnNames, workSheetName, filePath) => {
+    const data = users.map(user => {
+        return [user.id, user.name, user.age];
+    });
+    exportExcel(data, workSheetColumnNames, workSheetName, filePath);
+}
 const getUser = async (req) => {
     try {
         let userID = userinfo(req);
@@ -50,28 +72,77 @@ const searchProduct = async (req) => {
         console.log(error)
     }
 }
-const sortAZ = async (req) => {
-    let rs = await Product.aggregate()
-        .sort({ "name": 1 })
-    return rs;
-}
-const sortZA = async (req) => {
+const sortAZ = function (product){
+    // let rs = await Product.aggregate()
+    //     .sort({ "name_english": 1 })
+    // return rs;
+    let rs = product.sort((a, b) => {
+        var name1 = a.name;
+        var name2 = b.name;
 
-    let rs = await Product.aggregate()
-        .sort({ "name": -1 })
-    return rs;
+        if (name1.localeCompare(name2) < 0)
+            return -1;
+        else if (name1.localeCompare(name2) > 0)
+            return 1;
+        else if (name1.localeCompare(name2) == 0)
+            return 0;
+    })
+    return rs
 }
-const sortPriceAsc = async (req) => {
-    let rs = await Product.aggregate()
-        .sort({ price: 1 })
-        .collation({ locale: "en_US", numericOrdering: true })
-    return rs;
+const sortZA = function (product) {
+
+    let rs = product.sort((a, b) => {
+        var name1 = a.name;
+        var name2 = b.name;
+
+        if (name1.localeCompare(name2) > 0)
+            return -1;
+        else if (name1.localeCompare(name2) < 0)
+            return 1;
+        else if (name1.localeCompare(name2) == 0)
+            return 0;
+    })
+    return rs
+}
+const sortPriceAsc = function (product) {
+    // let rs = await Product.aggregate()
+    //     .sort({ price: 1 })
+    //     .collation({ locale: "en_US", numericOrdering: true })
+    // return rs;
+    let rs = product.sort((a, b) => {
+        var price1 = a.price;
+        var price2 = b.price;
+
+        if (price1.localeCompare(price2) < 0)
+            return -1;
+        else if (price1.localeCompare(price2) > 0)
+            return 1;
+        else if (price1.localeCompare(price2) == 0)
+            return 0;
+    })
+    return rs
 }
 const sortPriceDesc = async (req) => {
-    let rs = await Product.aggregate()
-        .sort({ price: -1 })
-        .collation({ locale: "en_US", numericOrdering: true })
-    return rs;
+    // let rs = await Product.aggregate()
+    //     .sort({ price: -1 })
+    //     .collation({ locale: "en_US", numericOrdering: true })
+    // return rs;
+
+}
+
+const sortPriceDesc2 = function (product) {
+    let rs = product.sort((a, b) => {
+        var price1 = a.price;
+        var price2 = b.price;
+
+        if (price1.localeCompare(price2) > 0)
+            return -1;
+        else if (price1.localeCompare(price2) < 0)
+            return 1;
+        else if (price1.localeCompare(price2) == 0)
+            return 0;
+    })
+    return rs
 }
 const getCategory = async (req) => {
     try {
@@ -82,9 +153,18 @@ const getCategory = async (req) => {
     }
 }
 
+const getApiTest = async () => {
+    fetch('http://localhost:9000/product/api-search-product/áo-polo-nam')
+    .then((response) => response.json())
+    .then(data => {
+        return data
+    })
+    
+}
 const escapeRegex = text => {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 }
+
 function removeVietnameseTones(str) {
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
     str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
@@ -113,4 +193,4 @@ function removeVietnameseTones(str) {
     str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, " ");
     return str;
 }
-module.exports = { getUser, searchProduct, sortAZ, sortZA, sortPriceAsc, sortPriceDesc, getCategory, escapeRegex, removeVietnameseTones };
+module.exports = { getUser, searchProduct, sortAZ, sortZA, sortPriceAsc, sortPriceDesc, sortPriceDesc2, getCategory, escapeRegex, removeVietnameseTones, getApiTest, exportUsersToExcel };

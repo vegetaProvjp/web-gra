@@ -15,10 +15,10 @@
                     <thead>
                         <tr>
                             <th scope="col"> </th>
-                            <th scope="col">Product</th>
-                            <th scope="col">Available</th>
-                            <th scope="col" class="text-center">Quantity</th>
-                            <th scope="col" class="text-right">Price</th>
+                            <th scope="col">Tên</th>
+
+                            <th scope="col" class="text-center">Số lượng</th>
+                            <th scope="col" class="text-right">Giá</th>
                             <th> </th>
                         </tr>
                     </thead>
@@ -28,7 +28,7 @@
                         <tr>
                             <td><img src="{{this.item.image.[0].url}}" width=50 height=50 /></td>
                             <td><a href="/product/{{this.item.slug}}">{{this.item.name}}</a></td>
-                            <td>In stock</td>
+
                             <td>
                                 <div class="center">
                                     <div class="input-group">
@@ -61,10 +61,10 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td></td>
-                            <td><strong>Total</strong></td>
-                            <td class="text-right"><strong>{{totalPrice}} €</strong></td>
+                            <td><strong>Tổng số tiền</strong></td>
+                            <td class="text-right"><strong>{{currencyVND totalPrice}}</strong></td>
                         </tr>
+
                     </tbody>
 
                 </table>
@@ -72,11 +72,14 @@
         </div>
         <div class="col mb-2">
             <div class="row">
+                {{#if fail}}
+                <div class="col-md-12 text-success" style="font-size: 16px;">{{fail}}</div>
+                {{/if}}
                 <div class="col-sm-12  col-md-6">
-                    <button class="btn btn-block btn-light">Continue Shopping</button>
+                    <button class="btn btn-block btn-light">Tiếp tục mua</button>
                 </div>
                 <div class="col-sm-12 col-md-6 text-right">
-                    <a href="/product/checkout" class="btn btn-lg btn-block btn-success text-uppercase">Checkout</a>
+                    <a href="/user/checkout-address" class="btn btn-lg btn-block btn-success text-uppercase">Thanh toán</a>
                 </div>
             </div>
         </div>
@@ -86,7 +89,7 @@
 {{else}}
 <div class="grid mt-4 mb-4">
     <div style="text-align: center;">
-        <h2>No item in cart</h2>
+        <h2>Giỏ hàng của bạn trống</h2>
     </div>
 </div>
 {{/if}}

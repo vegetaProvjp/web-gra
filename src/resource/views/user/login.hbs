@@ -24,7 +24,7 @@
     <form action="/user/login" class="form" id="signin-form" method="POST">
         <div class="title-form">ĐĂNG NHẬP</div>
         <div class="form-group">
-            <input type="email" name="email" class="form-input" placeholder="Nhập Email" id="signin-email">
+            <input type="email" name="email" class="form-input" placeholder="Nhập Email" id="signin-email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Email không hợp lệ" required>
             <span class="form-input-icon err">
                 <i class='bx bx-error-circle'></i>
             </span>
@@ -35,7 +35,8 @@
         </div>
         <div class="form-group">
             <input type="password" name="password" class="form-input" placeholder="Nhập mật khẩu"
-                id="signin-password">
+                id="signin-password" required pattern=".{6,}"
+              title="Mật khẩu không hợp lệ">
             <span class="form-input-icon err">
                 <i class='bx bx-error-circle'></i>
             </span>

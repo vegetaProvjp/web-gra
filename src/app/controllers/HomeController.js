@@ -3,6 +3,7 @@ const { mongooseToObject } = require('../../util/mongoose')
 const { multipleMongooseToObject } = require('../../util/mongoose')
 const userinfo = require("../../util/userinfo");
 const Product = require("../models/products");
+const Cart = require("../models/Cart");
 const { getUser, getCategory } = require('../../util/commonFunc');
 const FuzzySearch = require('fuzzy-search')
 class HomeController {
@@ -22,6 +23,9 @@ class HomeController {
       });
   }
   async indexProduct(req, res, next) {
+    var cart = new Cart(req.session.cart ? req.session.cart : {});
+    req.session.cart = cart
+
     if (req.cookies.jwt) {
       req.app.locals.login = true;
       req.app.locals.logout = false;
@@ -46,7 +50,6 @@ class HomeController {
     try {
       const query = req.query.search
       const product = await Product.find({})
-      console.log(query)
       const searcher = new FuzzySearch(product, ['name']);
       const result = searcher.search(query);
       res.json(result)

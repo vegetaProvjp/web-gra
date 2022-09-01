@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Product</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/reset.css">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="/images/icons/favicon.png" />
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/fonts/iconic/css/material-design-iconic-font.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/fonts/linearicons-v1.0.0/icon-font.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/vendor/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/vendor/animsition/css/animsition.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/vendor/daterangepicker/daterangepicker.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/vendor/slick/slick.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/vendor/MagnificPopup/magnific-popup.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/vendor/perfect-scrollbar/perfect-scrollbar.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/css/util.css">
+    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/user.css">
+
+
+    <!--===============================================================================================-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="grid container bootstrap snippet mt-5" style="margin-top: 100px !important">
+        <div class="main-body">
+
+            <div class="row row bg-light p-3">
+                <div class="col-md-3">
+                    <!--left col-->
+                    <nav class="category">
+                        <h1 class="category__heading">
+                            {{user.fullName}}
+                        </h1>
+                        <a href="/user/logout" class="border-bottom flex-c-m cl0 size-104 bg1 bor1 p-lr-15">
+                            Đăng xuất
+                        </a>
+                        <ul class="category-list">
+                            <li class="category-item">
+                                <a href="/user" class="category-item__link">Tài khoản của tôi</a>
+                            </li>
+                            <li class="category-item category-item--active">
+                                <a href="/user/orders" class="category-item__link">Đơn hàng của tôi</a>
+                            </li>
+
+                            <li class="category-item">
+                                <a href="/user/recently_viewed" class="category-item__link">Đã xem gần đây</a>
+                            </li>
+                            <li class="category-item">
+                                <a href="/user/favorite_product" class="category-item__link">Sản phẩm yêu thích</a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                </div>
+                <!--/col-9-->
+                <div class="col-md-9">
+                    <nav class="category">
+                        {{#each orders }}
+                        <div class="mx-auto" style="margin-bottom: 40px">
+                            <div class="card" style="width:100%; ">
+                                <div class="card-header" style="position: relative">
+                                    <strong>Tổng giá đơn đặt hàng: {{ currencyVND this.cart.totalPrice }}</strong>
+
+                                    {{!-- class="button-cancelled cl0 size-105 bg1 bor1 p-lr-15" --}}
+                                    {{#if (eq this.status "processing")}}
+                                    <div>
+                                        <a href="#cancelledModal" class="open-delete" data-id="{{this._id}}"
+                                            data-toggle="modal" type="button"
+                                            style="margin-bottom: 8px; margin-right: 2px; position:absolute; bottom:0;right:0;">Huỷ
+                                            đơn hàng</a>
+                                    </div>
+                                    {{/if}}
+                                    {{#if (eq this.status "shipped")}}
+                                    <div>
+                                        <a href="#shippedModal" class="open-shipped" data-id="{{this._id}}"
+                                            data-toggle="modal" type="button"
+                                            style="margin-bottom: 8px; margin-right: 16px; position:absolute; bottom:0;right:0;">Đơn hàng đã được vận chuyển tới?</a>
+                                    </div>
+                                    {{/if}}
+                                    {{#if (eq this.status "shipped")}}
+                                    <p class="font-weight-bold float-right">Đơn hàng đang được vận chuyển</p>
+                                    {{else if (eq this.status "processing")}}
+                                    <p class="font-weight-bold float-right">Đang chuẩn bị đơn hàng</p>
+                                    {{else if (eq this.status "completed")}}
+                                    <p class="font-weight-bold float-right">Đơn hàng đã được giao thành công</p>
+                                    {{else}}
+                                    <p class="font-weight-bold float-right">Đơn hàng đã bị huỷ</p>
+                                    {{/if}}
+                                    <br>
+
+                                    <strong>Thời gian đặt: {{handleDate this.createdAt}}</strong>
+                                    <br>
+                                    <strong>Tên: {{this.name}}</strong>
+                                    <br>
+                                    <strong>Địa chỉ: {{this.address}}</strong>
+                                    <br>
+                                    <strong>Phương thức thanh toán: {{check_pay this.pay}}</strong>
+                                </div>
+
+                                <ul class="list-group list-group-flush">
+                                    <p>{{this.totalQty}}</p>
+                                    {{#each this.items }}
+                                    <li class="list-group-item">
+                                        <a href="/product/{{this.item.slug}}">{{ this.item.name }}</a>
+                                        | Quantity: {{this.qty }}
+                                        <span class="float-right">{{currencyVND this.price }}</span>
+                                    </li>
+                                    {{/each}}
+                                </ul>
+                            </div>
+                        </div>
+                        {{/each}}
+                    </nav>
+                </div>
+            </div>
+
+        </div>
+        <div id="cancelledModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form name="cancelledOrderForm" method="POST">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Huỷ đơn hàng</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Bạn có chắc chắn muốn huỷ đơn hàng?</p>
+                            <p class="text-warning"><small>Hàng động này không thể khôi phục lại</small></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
+                            <button id="btnCancelledOrder" type="button" class="btn btn-danger">Huỷ đơn</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="shippedModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form name="shippedOrderForm" method="POST">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Xác nhận đơn hàng</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Bạn đã nhận được đơn hàng?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
+                            <button id="btnShippedOrder" type="button" class="btn btn-danger">Xác nhận</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/vendor/paginationjs/pagination.min.js"></script>
+    <script src="/js/pagination.js"></script>
+
+    <!--===============================================================================================-->
+    <script src="/vendor/animsition/js/animsition.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="/vendor/bootstrap/js/popper.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let cancelledId
+            let cancelledOrderForm = document.forms['cancelledOrderForm']
+            $('#cancelledModal').on('show.bs.modal', function (event) {
+                let button = $(event.relatedTarget) // Button that triggered the modal
+                cancelledId = button.data('id') // Extract info from data-* attributes
+            })
+            let btnCancelledOrder = document.getElementById('btnCancelledOrder')
+            btnCancelledOrder.onclick = function () {
+                cancelledOrderForm.action = '/user/cancelled/' + cancelledId + '?_method=PUT'
+                cancelledOrderForm.submit()
+            }
+        })
+
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let shippedId
+            let shippedOrderForm = document.forms['shippedOrderForm']
+            $('#shippedModal').on('show.bs.modal', function (event) {
+                let button = $(event.relatedTarget) // Button that triggered the modal
+                shippedId = button.data('id') // Extract info from data-* attributes
+            })
+            let btnShippedOrder = document.getElementById('btnShippedOrder')
+            btnShippedOrder.onclick = function () {
+                shippedOrderForm.action = '/user/shipped/' + shippedId + '?_method=PUT'
+                shippedOrderForm.submit()
+            }
+        })
+
+    </script>
+</body>
+
+</html>

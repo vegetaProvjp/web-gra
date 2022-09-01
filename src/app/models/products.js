@@ -10,7 +10,8 @@ const userSchema = new Schema({
   slug: { type: String, slug: "title", unique: true },
   price: { type: String, require: true },
   title: { type: String, require: true },
-  quantity: { type: String, require: true },
+  quantity: Number,
+  sale: Number,
   description: { type: String },
   //thể loại
   category: {
@@ -18,6 +19,9 @@ const userSchema = new Schema({
     ref: 'Category',
     required: true
   },
+  deleteAt: { type: Date, default: Date.now },
+  createAt: { type: Date, default: Date.now },
+  updateAt: { type: Date, default: Date.now },
   //người dùng tạo
   // account: {
   //   type: Schema.Types.ObjectId,
@@ -29,3 +33,9 @@ const userSchema = new Schema({
 });
 
 module.exports = mongoose.model("products", userSchema);
+// const products =mongoose.model('products', userSchema);
+// var accountAll = async function (req, res) {
+//   var account = await products.updateMany({},
+//     { $set: {"sale": 0} },
+//     {upsert: true})
+// }

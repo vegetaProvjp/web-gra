@@ -1,143 +1,195 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!DOCTYPE html>
+<html lang="en">
 
-<link rel="stylesheet" href="/css/user.css">
-<link rel="stylesheet" href="/css/main.css">
-<div class="grid container bootstrap snippet mt-5">
-    <div class="main-body">
+<head>
+    <title>Product</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/reset.css">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="/images/icons/favicon.png" />
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/fonts/iconic/css/material-design-iconic-font.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/fonts/linearicons-v1.0.0/icon-font.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/vendor/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/vendor/animsition/css/animsition.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/vendor/daterangepicker/daterangepicker.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/vendor/slick/slick.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/vendor/MagnificPopup/magnific-popup.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/vendor/perfect-scrollbar/perfect-scrollbar.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/css/util.css">
+    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/user.css">
 
-        <div class="row row bg-light p-3">
-            <div class="col-md-3">
-                <!--left col-->
-                <nav class="category">
-                    <h1 class="category__heading">
-                        {{user.fullName}}
-                    </h1>
-                    <a href="/user/logout" class="border-bottom flex-c-m cl0 size-104 bg1 bor1 p-lr-15">
-                        Đăng xuất
-                    </a>
-                    <ul class="category-list">
-                        <li class="category-item category-item--active">
-                            <a href="/user" class="category-item__link">Tài khoản của tôi</a>
-                        </li>
-                        <li class="category-item">
-                            <a href="/user/orders" class="category-item__link">Đơn hàng của tôi</a>
-                        </li>
 
-                        <li class="category-item">
-                            <a href="/user/address" class="category-item__link">Địa chỉ</a>
-                        </li>
-                        <li class="category-item">
-                            <a href="/user/recently_viewed" class="category-item__link">Đã xem gần đây</a>
-                        </li>
-                        <li class="category-item">
-                            <a href="/user/favorite_product" class="category-item__link">Sản phẩm yêu thích</a>
-                        </li>
-                    </ul>
-                </nav>
+    <!--===============================================================================================-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
 
-            </div>
-            <!--/col-3-->
-            <div class="col-md-9">
-                <nav class="category">
-                    <h4 class="success text-success mb-3" style="display: none;">Update successfully</h4>
-                    <h4 class="error text-danger mb-3" style="display: none;">Update failed</h4>
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li class="nav-item"><a data-toggle="tab" class="nav-link active" role="tab" href="#profile">My
-                                profile</a></li>
-                        <li class="nav-item"><a data-toggle="tab" class="nav-link" role="tab" href="#passwordtab">Change
-                                password</a></li>
-                    </ul>
+<body>
+    <div class="grid container bootstrap snippet mt-5" style="margin-top: 100px !important">
+        <div class="main-body">
 
-                    <div class="tab-content mt-3">
-                        <div class="tab-pane fade active show" role="tabpanel" id="profile">
-                            <form class="form" id="form-info" method="POST" action="/user/{{user._id}}?_method=PUT">
-                                <div class="form-group">
-                                    <div class="col-xs-12">
-                                        <label for="full_name">
-                                            <h5>Full name </h5>
-                                        </label>
-                                        <input type="text" value="{{user.fullName}}" class="form-control"
-                                            name="fullName" id="fullName" placeholder="Enter your full name"
-                                            title="Enter your full name">
+            <div class="row row bg-light p-3">
+                <div class="col-md-3">
+                    <!--left col-->
+                    <nav class="category">
+                        <h1 class="category__heading">
+                            {{user.fullName}}
+                        </h1>
+                        <a href="/user/logout" class="border-bottom flex-c-m cl0 size-104 bg1 bor1 p-lr-15">
+                            Đăng xuất
+                        </a>
+                        <ul class="category-list">
+                            <li class="category-item category-item--active">
+                                <a href="/user" class="category-item__link">Tài khoản của tôi</a>
+                            </li>
+                            <li class="category-item">
+                                <a href="/user/orders" class="category-item__link">Đơn hàng của tôi</a>
+                            </li>
+
+                            <li class="category-item">
+                                <a href="/user/recently_viewed" class="category-item__link">Đã xem gần đây</a>
+                            </li>
+                            <li class="category-item">
+                                <a href="/user/favorite_product" class="category-item__link">Sản phẩm yêu thích</a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                </div>
+                <!--/col-9-->
+                <div class="col-md-9">
+                    <nav class="category">
+                        <h4 class="success text-success mb-3" style="display: none;">Cập nhật thành công</h4>
+                        <h4 class="error text-danger mb-3" style="display: none;">Cập nhật thất bại</h4>
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item"><a data-toggle="tab" class="nav-link active" role="tab"
+                                    href="#profile">Tài khoản</a></li>
+                            <li class="nav-item"><a data-toggle="tab" class="nav-link" role="tab"
+                                    href="#passwordtab">Thay mật khẩu</a></li>
+                        </ul>
+
+                        <div class="tab-content mt-3">
+                            <div class="tab-pane fade active show" role="tabpanel" id="profile">
+                                <form class="form" id="form-info" method="POST" action="/user/{{user._id}}?_method=PUT">
+                                    <div class="form-group">
+                                        <div class="col-xs-12">
+                                            <label for="full_name">
+                                                <h5>Họ và tên đầy đủ </h5>
+                                            </label>
+                                            <input type="text" value="{{user.fullName}}" class="form-control"
+                                                name="fullName" id="fullName" placeholder="Nhập tên đầy đủ của bạn"
+                                                title="Nhập tên đầy đủ của bạn">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-xs-12">
-                                        <label for="phone">
-                                            <h5>Phone number</h5>
-                                        </label>
-                                        <input type="text" class="form-control" name="phone" id="phone"
-                                            placeholder="Enter your phone number" title="Enter your phone number"
-                                            value="{{user.phone}}">
+                                    <div class="form-group">
+                                        <div class="col-xs-12">
+                                            <label for="phone">
+                                                <h5>Số điện thoại</h5>
+                                            </label>
+                                            <input type="text" class="form-control" name="phone" id="phone"
+                                                placeholder="Nhập số điện thoại của bạn" title="Nhập số điện thoại của bạn"
+                                                value="{{user.phone}}">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
+                                    <div class="form-group">
 
-                                    <div class="col-xs-12">
-                                        <label for="email">
-                                            <h5>Email:</h5>
-                                        </label>
-                                        <input type="email" class="form-control" name="email" id="email"
-                                            value="{{user.email}}" placeholder="Enter your email"
-                                            title="Enter your email">
+                                        <div class="col-xs-12">
+                                            <label for="email">
+                                                <h5>Email:</h5>
+                                            </label>
+                                            <input type="email" class="form-control" name="email" id="email"
+                                                value="{{user.email}}" placeholder="Nhập email của bạn"
+                                                title="Nhập email của bạn">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-xs-12">
-                                        <label for="address">
-                                            <h5>Address:</h5>
-                                        </label>
-                                        <input type="text" class="form-control" name="address" id="address"
-                                            value="{{user.address}}" placeholder="Enter your address"
-                                            title="Enter your address">
+                                    <div class="form-group">
+                                        <div class="col-xs-12">
+                                            <label for="address">
+                                                <h5>Địa chỉ:</h5>
+                                            </label>
+                                            <input type="text" class="form-control" name="address" id="address"
+                                                value="{{user.address}}" placeholder="Nhập địa chỉ của bạn"
+                                                title="Nhập địa chỉ của bạn">
+                                        </div>
                                     </div>
-                                </div>
-                                <button class="btn btn-primary mt-5" type="submit">Save</button>
-                            </form>
+                                    <button class="btn btn-primary mt-5" type="submit">Save</button>
+                                </form>
+
+                            </div>
+                            <!--/tab-pane-->
+                            <div class="tab-pane fade" role="tabpanel" id="passwordtab">
+                                <form class="form" id="form-password" method="POST"
+                                    action="/user/updatePass/{{user._id}}?_method=PUT">
+                                    <div class="form-group">
+
+                                        <div class="col-xs-12">
+                                            <label for="password">
+                                                <h5>Mật khẩu mới</h5>
+                                            </label>
+                                            <input type="password" class="form-control" name="password" id="password"
+                                                placeholder="Nhập vào mật khẩu mới" title="Nhập vào mật khẩu mới">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+
+                                        <div class="col-xs-12">
+                                            <label for="password2">
+                                                <h5>Xác nhận mật khẩu</h5>
+                                            </label>
+                                            <input type="password" class="form-control" name="password2" id="password2"
+                                                placeholder="Xác nhận mật khẩu"
+                                                title="Xác nhận mật khẩu">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-12">
+                                            <br>
+                                            <button class="btn btn-lg btn-success pull-right" type="submit"><i
+                                                    class="glyphicon glyphicon-ok-sign"></i> Save</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
 
                         </div>
-                        <!--/tab-pane-->
-                        <div class="tab-pane fade" role="tabpanel" id="passwordtab">
-                            <form class="form" id="form-password" method="POST" action="/user/updatePass/{{user._id}}?_method=PUT">
-                                <div class="form-group">
-
-                                    <div class="col-xs-12">
-                                        <label for="password">
-                                            <h5>New password</h5>
-                                        </label>
-                                        <input type="password" class="form-control" name="password" id="password"
-                                            placeholder="Enter your new password" title="Nhập vào mật khẩu mới.">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-
-                                    <div class="col-xs-12">
-                                        <label for="password2">
-                                            <h5>Confirm Password</h5>
-                                        </label>
-                                        <input type="password" class="form-control" name="password2" id="password2"
-                                            placeholder="Confirm your new password" title="Confirm your new password">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-xs-12">
-                                        <br>
-                                        <button class="btn btn-lg btn-success pull-right" type="submit"><i
-                                                class="glyphicon glyphicon-ok-sign"></i> Save</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-
-                    </div>
-                </nav>
+                    </nav>
+                </div>
             </div>
+
         </div>
-
     </div>
-</div>
+    <script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/vendor/paginationjs/pagination.min.js"></script>
+    <script src="/js/pagination.js"></script>
 
-<script>
-</script>
-{{!-- <script src="/js/user-profile.js"></script> --}}
+    <!--===============================================================================================-->
+    <script src="/vendor/animsition/js/animsition.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="/vendor/bootstrap/js/popper.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <!--===============================================================================================-->
+</body>
+
+
+</html>

@@ -1,0 +1,459 @@
+<html lang="en">
+<link rel="stylesheet" href="/css/category.css">
+
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>Admin</title>
+
+    <!-- Custom fonts for this template -->
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+    <!-- Custom styles for this page -->
+    <link href="/node_modules/" rel="stylesheet" />
+    <script src="https://cdn.datatables.net/plug-ins/1.12.1/i18n/vi.json"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin">
+                <div class="sidebar-brand-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3"> Admin </div>
+            </a>
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item">
+                <a class="nav-link" href="/admin">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span></a>
+            </li>
+
+            <!-- Nav Item - Charts -->
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/charts">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Charts</span></a>
+            </li>
+
+            <!-- Nav Item - Tables -->
+            <li class="nav-item ">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTables"
+                    aria-expanded="true " aria-controls="collapseTables">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Tables</span>
+                </a>
+                <div id="collapseTables" class="collapse" aria-labelledby="headingTables"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="/admin/tables">List Product</a>
+                        <a class="collapse-item" href="/admin/create-product">Add Product</a>
+                        <a class="collapse-item" href="/admin/create-category">List Category</a>
+                        <a class="collapse-item" href="/admin/orders">List Order</a>
+                        {{#if (checkRole user.role)}}
+                        <a class="collapse-item" href="/admin/list-user">List User</a>
+                        {{/if}}
+                    </div>
+                </div>
+            </li>
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div style="margin-top: 40px"  class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <form class="form-inline">
+                        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                    </form>
+
+                    <!-- Topbar Search -->
+                    <form
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                aria-label="Search" aria-describedby="basic-addon2" />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{user.fullName}}</span>
+                                <img class="img-profile rounded-circle" src="/images/admin/undraw_profile.svg" />
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <div class="table-wrapper">
+                        <div class="table-title">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h2>Manage <b>Category</b></h2>
+                                </div>
+                                <div class="col-sm-6">
+                                    <a href="#addCategoryModal" class="btn btn-success" data-toggle="modal"><i
+                                            class="material-icons">&#xE147;</i> <span>Add New Category</span></a>
+                                    <a href="#deleteCategoryModal" class="btn btn-danger" data-toggle="modal"><i
+                                            class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <table id="example" class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <span class="custom-checkbox">
+                                            <input type="checkbox" id="selectAll">
+                                            <label for="selectAll"></label>
+                                        </span>
+                                    </th>
+                                    <th>Name</th>
+
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each category}}
+                                <tr>
+                                    <td>
+                                        <span class="custom-checkbox">
+                                            <input type="checkbox" id="checkbox4" name="options[]" value="1">
+                                            <label for="checkbox4"></label>
+                                        </span>
+                                    </td>
+                                    <td>{{this.title}}</td>
+                                    <td class="text-nowrap">
+                                        <a href="#editCategoryModal" class="open-edit" data-title="{{this.title}}"
+                                            data-id="{{this._id}}" data-toggle="modal"><i class="material-icons"
+                                                data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                        <a href="#deleteCategoryModal" class="open-delete" data-id="{{this._id}}"
+                                            data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
+                                                title="Delete">&#xE872;</i></a>
+                                    </td>
+
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+                <div id="addCategoryModal" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form method="POST" action="/admin/create-category">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Add Category</h4>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                        aria-hidden="true">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input name="nameCategory" type="text" class="form-control" required>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                    <input type="submit" class="btn btn-success" value="Add">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Edit Modal HTML -->
+                <div id="editCategoryModal" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            {{!-- <form method="POST" action="/admin/create-category/{{this._id}}/?_method=PUT"> --}}
+                                <form name="editCategoryForm" method="POST">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Edit Category</h4>
+
+                                        <button type="button" class="close" data-dismiss="modal"
+                                            aria-hidden="true">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group nameCategory-modal">
+                                            <label>Name</label>
+                                            <input id="nameCategory" name="nameCategory" type="text"
+                                                class="form-control" value="">
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Không</button>
+                                        <button id="btnEditCategory" type="submit" class="btn btn-primary">Có</button>
+                                    </div>
+                                </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Delete Modal HTML -->
+                <div id="deleteCategoryModal" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form>
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Delete Category</h4>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                        aria-hidden="true">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Bạn có chắc chắn muốn xoá?</p>
+                                    <p class="text-warning"><small>Hàng động này không thể khôi phục lại</small></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Huỷ</button>
+                                    <button id="btnDeleteCategory" type="button" class="btn btn-danger">Xoá</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <form name="deleteCategoryForm" method="POST"></form>
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Website 2022</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end
+                    your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form name="deleteProductForm" method="POST"></form>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="/js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="https://cdn.datatables.net/plug-ins/1.12.1/sorting/intl.js"></script>
+    <script src="/js/demo/datatables-demo.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Activate tooltip
+            $('[data-toggle="tooltip"]').tooltip();
+
+            // Select/Deselect checkboxes
+            var checkbox = $('table tbody input[type="checkbox"]');
+            $("#selectAll").click(function () {
+                if (this.checked) {
+                    checkbox.each(function () {
+                        this.checked = true;
+                    });
+                } else {
+                    checkbox.each(function () {
+                        this.checked = false;
+                    });
+                }
+            });
+            checkbox.click(function () {
+                if (!this.checked) {
+                    $("#selectAll").prop("checked", false);
+                }
+            });
+        });
+    </script>
+
+    {{!-- delete categorry js --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let categoryId
+            let deleteCategoryForm = document.forms['deleteCategoryForm']
+            $('#deleteCategoryModal').on('show.bs.modal', function (event) {
+                let button = $(event.relatedTarget) // Button that triggered the modal
+                categoryId = button.data('id') // Extract info from data-* attributes
+            })
+            let btnDeleteCategory = document.getElementById('btnDeleteCategory')
+            btnDeleteCategory.onclick = function () {
+                deleteCategoryForm.action = '/admin/create-category/' + categoryId + '?_method=DELETE'
+                deleteCategoryForm.submit()
+            }
+        })
+        $(document).on('click', ".open-edit", function () {
+            let titleCategory = $(this).data('title')
+            $(".modal-body #nameCategory").val(titleCategory)
+        })
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let categoryId
+            let editCategoryForm = document.forms['editCategoryForm']
+            $('#editCategoryModal').on('show.bs.modal', function (event) {
+                let button = $(event.relatedTarget) // Button that triggered the modal
+                categoryId = button.data('id')
+                console.log(categoryId) // Extract info from data-* attributes
+            })
+            let btnEditCategory = document.getElementById('btnEditCategory')
+            btnEditCategory.onclick = function () {
+                editCategoryForm.action = '/admin/create-category/' + categoryId + '?_method=PUT'
+                editCategoryForm.submit()
+            }
+        })
+    </script>
+
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.12.1/sorting/intl.js"></script>
+    <script>
+        $.fn.dataTable.ext.order.intl('vi');
+        $.fn.DataTable.ext.type.search.string = function (data) {
+            return !data ?
+                '' :
+                typeof data === 'string' ?
+                    data
+                        .replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a")
+                        .replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e")
+                        .replace(/ì|í|ị|ỉ|ĩ/g, "i")
+                        .replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o")
+                        .replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u")
+                        .replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y")
+                        .replace(/đ/g, "d")
+                        .replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A")
+                        .replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E")
+                        .replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O")
+                        .replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I")
+                        .replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O")
+                        .replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U")
+                        .replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y")
+                        .replace(/Đ/g, "D") :
+                    data;
+        };
+
+
+        $(document).ready(function () {
+
+            var tabla = $('#example').DataTable({
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.12.1/i18n/vi.json'
+                },
+            });
+            jQuery('#example_filter input').keyup(function () {
+                table
+                    .search(
+                        jQuery.fn.DataTable.ext.type.search.string(this.value)
+                    )
+                    .draw();
+            });
+        });
+    </script>
+
+</body>
+
+</html>

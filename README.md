@@ -1,2 +1,2 @@
-npm i\n
+npm i </br>
 npm start
